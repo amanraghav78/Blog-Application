@@ -3,6 +3,8 @@ package com.example.blog.application.controllers;
 import com.example.blog.application.payloads.ApiResponse;
 import com.example.blog.application.payloads.CategoryDto;
 import com.example.blog.application.services.CategoryService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +14,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
+    @Autowired
     private CategoryService categoryService;
 
     @PostMapping("/")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto createCategoryDto = this.categoryService.createCategory(categoryDto);
         return new ResponseEntity<CategoryDto>(createCategoryDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{catId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer catId){
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer catId){
         CategoryDto updatedCategoryDto = this.categoryService.updateCategory(categoryDto, catId);
         return new ResponseEntity<CategoryDto>(updatedCategoryDto, HttpStatus.OK);
     }
