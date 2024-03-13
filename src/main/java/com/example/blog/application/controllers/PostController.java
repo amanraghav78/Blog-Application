@@ -3,6 +3,7 @@ package com.example.blog.application.controllers;
 import com.example.blog.application.entities.Post;
 import com.example.blog.application.payloads.ApiResponse;
 import com.example.blog.application.payloads.PostDto;
+import com.example.blog.application.payloads.PostResponse;
 import com.example.blog.application.services.PostService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,12 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPost(){
-        List<PostDto> allPost = this.postService.getAllPost();
-        return new ResponseEntity<List<PostDto>>(allPost, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPost(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize
+            ){
+        PostResponse postResponse = this.postService.getAllPost(pageNumber, pageSize);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/posts/{postId}")
